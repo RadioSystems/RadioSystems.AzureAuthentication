@@ -4,7 +4,7 @@ Radio Systems Azure Authentication is a module that enables Azure Authentication
 
 ## How to use
 
-1. If you don't have an Azure Active Directory, set one up by following "insert link". Create an application in Azure that will correspond to your Orchard instance. The settings you will need to configure Orchard Azure Active Directory Authentication will be on the configure tab of the created application.
+1. If you don't have an Azure Active Directory, get more info [Here](https://azure.microsoft.com/en-us/documentation/articles/active-directory-whatis/). Create an application in Azure that will correspond to your Orchard instance. The settings you will need to configure Orchard Azure Active Directory Authentication will be on the configure tab of the created application.
 2. Before enabling the module, your must add an admin user to Orchard via the Orchard admin. Ensure that the user name matches the Azure Active Directory user name for the user you wish to have admin privileges.
 3. After enabling the module, before navigating away from the admin, go to site settings under the **Azure** group. Fill in the information from your Azure Active Directory
 4. You may have to restart your Orchard site for the new settings to take effect.
