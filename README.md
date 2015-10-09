@@ -16,7 +16,6 @@ If you are including the module form source, there are some steps that have to b
 
 1. First install referenced NuGet packages for the module.
 2. Then, modify the Orchard.Web projects web.config file with these lines
-
 ```xml
     <dependentAssembly>
         <assemblyIdentity name="Microsoft.Owin" publicKeyToken="31bf3856ad364e35" culture="neutral" />
@@ -52,13 +51,10 @@ If you are including the module form source, there are some steps that have to b
         <bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0" />
     </dependentAssembly>
 ```
-
 3. In the assemblies section of the Orchard.Web web.config, modify the entry for Microsoft.Owin.Host.SystemWeb
-	
 ```xml
     <add assembly="Microsoft.Owin.Host.SystemWeb, **Version=3.0.1.0**" />
 ```
-
 4. These modifications should ensure that the module runs correctly.
 
 ## Issues
