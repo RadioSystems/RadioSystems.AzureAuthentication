@@ -16,49 +16,49 @@ If you are including the module form source, there are some steps that have to b
 
 1. First install referenced NuGet packages for the module.
 2. Then, modify the Orchard.Web projects web.config file with these lines
-	```xml
-	    <dependentAssembly>
-	        <assemblyIdentity name="Microsoft.Owin" publicKeyToken="31bf3856ad364e35" culture="neutral" />
-	            <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
-	    </dependentAssembly>
-	    <dependentAssembly>
-	        <assemblyIdentity name="Microsoft.Owin.Host.SystemWeb" 
-		      publicKeyToken="31bf3856ad364e35" culture="neutral" />
-	        <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
-	    </dependentAssembly>
-	    <dependentAssembly>
-	        <assemblyIdentity name="Microsoft.IdentityModel.Protocol.Extensions" 
-	            publicKeyToken="31bf3856ad364e35" culture="neutral" />
-	        <bindingRedirect oldVersion="0.0.0.0-1.0.2.33" newVersion="1.0.2.33" />
-	    </dependentAssembly>
-	    <dependentAssembly>
-	        <assemblyIdentity name="System.IdentityModel.Tokens.Jwt" 
-	            publicKeyToken="31bf3856ad364e35" culture="neutral" />
-	        <bindingRedirect oldVersion="0.0.0.0-4.0.20622.1351" newVersion="4.0.20622.1351" />
-	    </dependentAssembly>
-	    <dependentAssembly>
-	        <assemblyIdentity name="Microsoft.IdentityModel.Protocol.Extensions" 
-	            publicKeyToken="31bf3856ad364e35"      
-	            culture="neutral" />
-	        <bindingRedirect oldVersion="0.0.0.0-1.0.2.33" newVersion="1.0.2.33" />
-	    </dependentAssembly>
-	    <dependentAssembly>
-	        <!-- 2.0.0.0 by System.Data.SqlServerCe, Version=4.0.0.0 -->
-	        <assemblyIdentity name="System.Transactions" 
-	             publicKeyToken="31bf3856ad364e35" culture="neutral" />
-	        <bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0" />
-	    </dependentAssembly>
-	    <dependentAssembly>
-	        <!-- 2.0.0.0 by System.Data.SqlServerCe, Version=4.0.0.0 -->
-	        <assemblyIdentity name="System.Data" 
-	            publicKeyToken="31bf3856ad364e35" culture="neutral" />
-	        <bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0" />
-	    </dependentAssembly>
-	```
+```xml
+    <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin" publicKeyToken="31bf3856ad364e35" culture="neutral" />
+            <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
+    </dependentAssembly>
+    <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin.Host.SystemWeb" 
+	      publicKeyToken="31bf3856ad364e35" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-3.0.1.0" newVersion="3.0.1.0" />
+    </dependentAssembly>
+    <dependentAssembly>
+        <assemblyIdentity name="Microsoft.IdentityModel.Protocol.Extensions" 
+            publicKeyToken="31bf3856ad364e35" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-1.0.2.33" newVersion="1.0.2.33" />
+    </dependentAssembly>
+    <dependentAssembly>
+        <assemblyIdentity name="System.IdentityModel.Tokens.Jwt" 
+            publicKeyToken="31bf3856ad364e35" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-4.0.20622.1351" newVersion="4.0.20622.1351" />
+    </dependentAssembly>
+    <dependentAssembly>
+        <assemblyIdentity name="Microsoft.IdentityModel.Protocol.Extensions" 
+            publicKeyToken="31bf3856ad364e35"      
+            culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-1.0.2.33" newVersion="1.0.2.33" />
+    </dependentAssembly>
+    <dependentAssembly>
+        <!-- 2.0.0.0 by System.Data.SqlServerCe, Version=4.0.0.0 -->
+        <assemblyIdentity name="System.Transactions" 
+             publicKeyToken="31bf3856ad364e35" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0" />
+    </dependentAssembly>
+    <dependentAssembly>
+        <!-- 2.0.0.0 by System.Data.SqlServerCe, Version=4.0.0.0 -->
+        <assemblyIdentity name="System.Data" 
+            publicKeyToken="31bf3856ad364e35" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-4.0.0.0" newVersion="4.0.0.0" />
+    </dependentAssembly>
+```
 3. In the assemblies section of the Orchard.Web web.config, modify the entry for Microsoft.Owin.Host.SystemWeb
-	```xml
-	    <add assembly="Microsoft.Owin.Host.SystemWeb, **Version=3.0.1.0**" />
-	```
+```xml
+    <add assembly="Microsoft.Owin.Host.SystemWeb, **Version=3.0.1.0**" />
+```
 4. These modifications should ensure that the module runs correctly.
 
 ## Issues
