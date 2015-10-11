@@ -12,7 +12,7 @@ Radio Systems Azure Authentication is a module that enables Azure Authentication
 
 ## Installing via Source Code
 
-If you are including the module form source, there are some steps that have to be followed in order for the module to run. 
+If you are including the module from source, there are some steps that have to be followed in order for the module to run. 
 
 1. First install referenced NuGet packages for the module.
 2. Then, modify the Orchard.Web projects web.config file with these lines
