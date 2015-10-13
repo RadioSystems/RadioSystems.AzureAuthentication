@@ -17,7 +17,7 @@ using Orchard.Data;
 using Orchard.Logging;
 using Orchard.Owin;
 using Owin;
-using RadioSystems.AzureAuthentication.Enums;
+using RadioSystems.AzureAuthentication.Constants;
 using RadioSystems.AzureAuthentication.Models;
 using RadioSystems.AzureAuthentication.Security;
 

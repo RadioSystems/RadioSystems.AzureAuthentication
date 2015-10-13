@@ -1,4 +1,4 @@
-﻿namespace RadioSystems.AzureAuthentication.Enums {
+﻿namespace RadioSystems.AzureAuthentication.Constants {
     public sealed class DefaultAzureSettings {
         public static readonly string Tenant = "https://mytenant.com";
         public static readonly string ClientId = "MyClientId";
