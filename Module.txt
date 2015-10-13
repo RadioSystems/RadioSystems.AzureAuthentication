@@ -8,5 +8,6 @@ Description: Description for the module
 Features:
     RadioSystems.AzureAuthentication:
         Description: Description for feature AzureAuthentication.
+		Dependencies: Orchard.Roles
 		Category: Authentication
 		

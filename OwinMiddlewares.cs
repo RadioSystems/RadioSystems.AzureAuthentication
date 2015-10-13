@@ -6,17 +6,17 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Helpers;
+using System.Web.Security;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.ActiveDirectory;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.DataProtection;
 using Microsoft.Owin.Security.OpenIdConnect;
-using Orchard;
-using Orchard.ContentManagement;
 using Orchard.Data;
-using Orchard.Environment;
 using Orchard.Logging;
 using Orchard.Owin;
+using Orchard.Roles.Models;
+using Orchard.Security;
 using Owin;
 using RadioSystems.AzureAuthentication.Constants;
 using RadioSystems.AzureAuthentication.Models;
@@ -26,6 +26,9 @@ namespace RadioSystems.AzureAuthentication {
     public class OwinMiddlewares : IOwinMiddlewareProvider {
         public ILogger Logger { get; set; }
 
+        private readonly IMembershipService _membershipService;
+        private readonly IRepository<UserRolesPartRecord> _userRolesRepository;
+        private readonly IRepository<RoleRecord> _roleRepository; 
 
         private readonly string _azureClientId = DefaultAzureSettings.ClientId;
         private readonly string _azureTenant = DefaultAzureSettings.Tenant;
@@ -36,8 +39,15 @@ namespace RadioSystems.AzureAuthentication {
         private readonly bool _sslEnabled = DefaultAzureSettings.SSLEnabled;
         private readonly bool _azureWebSiteProtectionEnabled = DefaultAzureSettings.AzureWebSiteProtectionEnabled;
 
-        public OwinMiddlewares(IRepository<AzureSettingsPartRecord> azureSettingRepository) {
+        public OwinMiddlewares(IRepository<AzureSettingsPartRecord> azureSettingRepository, 
+            IRepository<UserRolesPartRecord> userRolesRepository, IMembershipService membershipService,
+            IRepository<RoleRecord> roleRepository) {
+
             Logger = NullLogger.Instance;
+
+            _userRolesRepository = userRolesRepository;
+            _roleRepository = roleRepository;
+            _membershipService = membershipService;
 
             try {
                 var settings = azureSettingRepository.Table.FirstOrDefault();
@@ -71,7 +81,6 @@ namespace RadioSystems.AzureAuthentication {
                 Notifications = new OpenIdConnectAuthenticationNotifications {
                     SecurityTokenValidated = (context) => {
                         try {
-                            //We should be able assign roles based on claims here
                             return Task.FromResult(0);
                         }
                         catch (SecurityTokenValidationException ex) {

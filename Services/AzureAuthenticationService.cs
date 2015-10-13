@@ -1,4 +1,5 @@
 ﻿using System.Web;
+using System.Web.Security;
 using Orchard.Mvc;
 using Orchard.Security;
 
@@ -27,7 +28,8 @@ namespace RadioSystems.AzureAuthentication.Services {
 
             var userName = azureUser.Identity.Name.Trim();
 
-            var localUser = _membershipService.GetUser(userName);
+            var localUser = _membershipService.GetUser(userName) ?? 
+                _membershipService.CreateUser(new CreateUserParams(userName, Membership.GeneratePassword(16, 5), userName, null, null, true));
 
             return localUser;
         }
