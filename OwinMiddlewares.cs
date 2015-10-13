@@ -14,6 +14,7 @@ using Microsoft.Owin.Security.OpenIdConnect;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.Data;
+using Orchard.Environment;
 using Orchard.Logging;
 using Orchard.Owin;
 using Owin;
@@ -25,12 +26,14 @@ namespace RadioSystems.AzureAuthentication {
     public class OwinMiddlewares : IOwinMiddlewareProvider {
         public ILogger Logger { get; set; }
 
+
         private readonly string _azureClientId = DefaultAzureSettings.ClientId;
         private readonly string _azureTenant = DefaultAzureSettings.Tenant;
         private readonly string _azureADInstance = DefaultAzureSettings.ADInstance;
         private readonly string _logoutRedirectUri = DefaultAzureSettings.LogoutRedirectUri;
         private readonly string _azureAdInstance = DefaultAzureSettings.ADInstance;
         private readonly string _azureAppName = DefaultAzureSettings.AppName;
+        private readonly bool _sslEnabled = DefaultAzureSettings.SSLEnabled;
         private readonly bool _azureWebSiteProtectionEnabled = DefaultAzureSettings.AzureWebSiteProtectionEnabled;
 
         public OwinMiddlewares(IRepository<AzureSettingsPartRecord> azureSettingRepository) {
@@ -48,6 +51,7 @@ namespace RadioSystems.AzureAuthentication {
                 _azureAdInstance = settings.ADInstance ?? _azureADInstance;
                 _azureAppName = settings.AppName ?? _azureAppName;
                 _logoutRedirectUri = settings.LogoutRedirectUri ?? _logoutRedirectUri;
+                _sslEnabled = settings.SSLEnabled;
                 _azureWebSiteProtectionEnabled = settings.AzureWebSiteProtectionEnabled;
             }
             catch (Exception ex) {
@@ -80,12 +84,9 @@ namespace RadioSystems.AzureAuthentication {
             var cookieOptions = new CookieAuthenticationOptions();
 
             var bearerAuthOptions = new WindowsAzureActiveDirectoryBearerAuthenticationOptions {
-                //TODO: set this to https if ssl enabled settings is true
                 TokenValidationParameters = new TokenValidationParameters {
-                    ValidAudience = string.Format("http://{0}/{1}", _azureTenant, _azureAppName)
-                },
-                Tenant = _azureTenant,
-                AuthenticationType = "Oauth2Bearer"
+                    ValidAudience = string.Format(_sslEnabled ? "https://{0}/{1}" : "http://{0}/{1}", _azureTenant, _azureAppName)
+                }
             };
 
             if (_azureWebSiteProtectionEnabled) {
