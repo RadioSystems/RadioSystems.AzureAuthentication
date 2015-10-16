@@ -12,6 +12,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.DataProtection;
 using Microsoft.Owin.Security.OpenIdConnect;
 using Orchard;
+using Orchard.Settings;
 using Orchard.ContentManagement;
 using Orchard.Data;
 using Orchard.Logging;
@@ -25,56 +26,33 @@ namespace RadioSystems.AzureAuthentication {
     public class OwinMiddlewares : IOwinMiddlewareProvider {
         public ILogger Logger { get; set; }
 
-        private readonly string _azureClientId = DefaultAzureSettings.ClientId;
-        private readonly string _azureTenant = DefaultAzureSettings.Tenant;
-        private readonly string _azureADInstance = DefaultAzureSettings.ADInstance;
-        private readonly string _logoutRedirectUri = DefaultAzureSettings.LogoutRedirectUri;
-        private readonly string _azureAdInstance = DefaultAzureSettings.ADInstance;
-        private readonly string _azureAppName = DefaultAzureSettings.AppName;
-        private readonly bool _azureWebSiteProtectionEnabled = DefaultAzureSettings.AzureWebSiteProtectionEnabled;
+        private readonly ISiteService _siteService;
 
-        public OwinMiddlewares(IRepository<AzureSettingsPartRecord> azureSettingRepository) {
+        private static readonly string _defaultTenant = "https://mytenant.com";
+        private static readonly string _defaultClientId = "MyClientId";
+        private static readonly string _defaultADInstance = "https://login.microsoftonline.com/{0}";
+        private static readonly string _defaultAppName = "MyAppName";
+
+        public OwinMiddlewares() {
             Logger = NullLogger.Instance;
 
-            try {
-                var settings = azureSettingRepository.Table.FirstOrDefault();
-
-                if (settings == null) {
-                    return;
-                }
-
-                _azureClientId = settings.ClientId ?? _azureClientId;
-                _azureTenant = settings.Tenant ?? _azureTenant;
-                _azureAdInstance = settings.ADInstance ?? _azureADInstance;
-                _azureAppName = settings.AppName ?? _azureAppName;
-                _logoutRedirectUri = settings.LogoutRedirectUri ?? _logoutRedirectUri;
-                _azureWebSiteProtectionEnabled = settings.AzureWebSiteProtectionEnabled;
-            }
-            catch (Exception ex) {
-                Logger.Log(LogLevel.Debug, ex, "An error occured while accessing azure settings: {0}");
-            }
+            _siteService = siteService;
         }
 
         public IEnumerable<OwinMiddlewareRegistration> GetOwinMiddlewares() {
             var middlewares = new List<OwinMiddlewareRegistration>();
 
+            var site = _siteService.GetSiteSettings();
+
+            var settings = site.As<AzureSettingsPart>();
+
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
 
             var openIdOptions = new OpenIdConnectAuthenticationOptions {
-                ClientId = _azureClientId,
-                Authority = string.Format(CultureInfo.InvariantCulture, _azureAdInstance, _azureTenant),
-                PostLogoutRedirectUri = _logoutRedirectUri,
-                Notifications = new OpenIdConnectAuthenticationNotifications {
-                    SecurityTokenValidated = (context) => {
-                        try {
-                            //We should be able assign roles based on claims here
-                            return Task.FromResult(0);
-                        }
-                        catch (SecurityTokenValidationException ex) {
-                            return Task.FromResult(0);
-                        }
-                    }
-                }
+                ClientId = settings.ClientId ?? _defaultClientId,
+                Authority = string.Format(CultureInfo.InvariantCulture, settings.ADInstance ?? _defaultADInstance, settings.Tenant ?? _defaultTenant),
+                PostLogoutRedirectUri = settings.LogoutRedirectUri ?? site.BaseUrl,
+                Notifications = new OpenIdConnectAuthenticationNotifications()
             };
 
             var cookieOptions = new CookieAuthenticationOptions();
@@ -82,13 +60,13 @@ namespace RadioSystems.AzureAuthentication {
             var bearerAuthOptions = new WindowsAzureActiveDirectoryBearerAuthenticationOptions {
                 //TODO: set this to https if ssl enabled settings is true
                 TokenValidationParameters = new TokenValidationParameters {
-                    ValidAudience = string.Format("http://{0}/{1}", _azureTenant, _azureAppName)
+                    ValidAudience = string.Format("http://{0}/{1}", settings.Tenant ?? _defaultTenant, settings.AppName ?? _defaultAppName)
                 },
-                Tenant = _azureTenant,
+                Tenant = _defaultTenant,
                 AuthenticationType = "Oauth2Bearer"
             };
 
-            if (_azureWebSiteProtectionEnabled) {
+            if (_defaultWebSiteProtectionEnabled) {
                 middlewares.Add(new OwinMiddlewareRegistration {
                     Priority = "9",
                     Configure = app => { app.SetDataProtectionProvider(new MachineKeyProtectionProvider()); }

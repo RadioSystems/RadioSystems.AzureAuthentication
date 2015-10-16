@@ -2,9 +2,11 @@
 using Orchard.ContentManagement;
 using Orchard.Data;
 using Orchard.Localization;
+using JetBrains.Annotations;
 using RadioSystems.AzureAuthentication.Models;
 
 namespace RadioSystems.AzureAuthentication.Handlers {
+    [UsedImplicitly]
     public class AzureSettingsPartHandler : ContentHandler {
         public Localizer T { get; set; }
         
@@ -12,9 +14,9 @@ namespace RadioSystems.AzureAuthentication.Handlers {
             T = NullLocalizer.Instance;
         }
 
-        public AzureSettingsPartHandler(IRepository<AzureSettingsPartRecord> azureSettingsRepository) {
-            Filters.Add(StorageFilter.For(azureSettingsRepository));
+        public AzureSettingsPartHandler() {
             Filters.Add(new ActivatingFilter<AzureSettingsPart>("Site"));
+            Filters.Add(new TemplateFilterForPart<AzureSettingsPart>("AzureSettings", "Parts/AzureSettings", "Modules"));
         }
 
         protected override void GetItemMetadata(GetContentItemMetadataContext context) {
@@ -23,7 +25,7 @@ namespace RadioSystems.AzureAuthentication.Handlers {
             }
 
             base.GetItemMetadata(context);
-            context.Metadata.EditorGroupInfo.Add(new GroupInfo(T("Azure")));
+            context.Metadata.EditorGroupInfo.Add(new GroupInfo(T("Azure Authentication")));
         }
     }
 }
