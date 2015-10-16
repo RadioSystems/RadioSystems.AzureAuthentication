@@ -33,7 +33,7 @@ namespace RadioSystems.AzureAuthentication {
         private static readonly string _defaultADInstance = "https://login.microsoftonline.com/{0}";
         private static readonly string _defaultAppName = "MyAppName";
 
-        public OwinMiddlewares() {
+        public OwinMiddlewares(ISiteService siteService) {
             Logger = NullLogger.Instance;
 
             _siteService = siteService;
