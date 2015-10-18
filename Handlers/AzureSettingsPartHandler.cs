@@ -19,7 +19,7 @@ namespace RadioSystems.AzureAuthentication.Handlers {
             }
 
             base.GetItemMetadata(context);
-            context.Metadata.EditorGroupInfo.Add(new GroupInfo(T("Azure")));
+            context.Metadata.EditorGroupInfo.Add(new GroupInfo(T("Azure Authentication")));
         }
     }
 }
