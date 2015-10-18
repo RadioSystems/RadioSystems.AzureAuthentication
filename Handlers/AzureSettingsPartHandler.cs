@@ -9,14 +9,11 @@ namespace RadioSystems.AzureAuthentication.Handlers {
     [UsedImplicitly]
     public class AzureSettingsPartHandler : ContentHandler {
         public Localizer T { get; set; }
-        
+		
         public AzureSettingsPartHandler() {
-            T = NullLocalizer.Instance;
-        }
-
-        public AzureSettingsPartHandler() {
+			T= NullLocalizer.Instance;
             Filters.Add(new ActivatingFilter<AzureSettingsPart>("Site"));
-            Filters.Add(new TemplateFilterForPart<AzureSettingsPart>("AzureSettings", "Parts/AzureSettings", "Modules"));
+            Filters.Add(new TemplateFilterForPart<AzureSettingsPart>("AzureSettings", "Parts/AzureSettings", "Azure Authentication"));
         }
 
         protected override void GetItemMetadata(GetContentItemMetadataContext context) {
