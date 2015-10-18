@@ -13,7 +13,6 @@ using Orchard.Logging;
 using Orchard.Owin;
 using Orchard.Settings;
 using Owin;
-using RadioSystems.AzureAuthentication.Constants;
 using RadioSystems.AzureAuthentication.Models;
 using RadioSystems.AzureAuthentication.Security;
 
