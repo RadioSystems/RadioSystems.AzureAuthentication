@@ -34,11 +34,11 @@ namespace RadioSystems.AzureAuthentication {
             var site = siteService.GetSiteSettings();
             var azureSettings = site.As<AzureSettingsPart>();
 
-            _azureClientId = azureSettings.ClientId ?? "5af0d675-5736-4e38-bd94-493118e422cf";
-            _azureTenant = azureSettings.Tenant ?? "invisiblefence.com";
-            _azureADInstance = "https://login.microsoft.com/{0}";
-            _logoutRedirectUri = site.BaseUrl;
-            _azureAppName = azureSettings.AppName ?? "AuthModuleDemo";
+            _azureClientId = ((azureSettings.ClientId == null) || (azureSettings.ClientId == string.Empty)) ? "5af0d675-5736-4e38-bd94-493118e422cf" : azureSettings.ClientId;
+            _azureTenant = ((azureSettings.Tenant == null) || (azureSettings.Tenant == string.Empty)) ? "invisiblefence.com": azureSettings.Tenant;
+            _azureADInstance = ((azureSettings.ADInstance == null) || (azureSettings.ADInstance == string.Empty)) ? "https://login.microsoft.com/{0}" : azureSettings.ADInstance;
+            _logoutRedirectUri = ((azureSettings.LogoutRedirectUri == null) || (azureSettings.LogoutRedirectUri == string.Empty)) ? site.BaseUrl : azureSettings.LogoutRedirectUri;
+            _azureAppName = ((azureSettings.AppName == null) || (azureSettings.AppName == string.Empty)) ? "AuthModuleDemo" : azureSettings.AppName;
             _sslEnabled = azureSettings.SSLEnabled;
             _azureWebSiteProtectionEnabled = azureSettings.AzureWebSiteProtectionEnabled;
         }

@@ -158,7 +158,6 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Drivers\AzureSettingsPartDriver.cs" />
-    <Compile Include="Constants\DefaultAzureSettings.cs" />
     <Compile Include="Handlers\AzureSettingsPartHandler.cs" />
     <Compile Include="Models\AzureSettingsPart.cs" />
     <Compile Include="OwinMiddlewares.cs" />
