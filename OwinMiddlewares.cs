@@ -34,12 +34,23 @@ namespace RadioSystems.AzureAuthentication {
             var site = siteService.GetSiteSettings();
             var azureSettings = site.As<AzureSettingsPart>();
 
-            _azureClientId = ((azureSettings.ClientId == null) || (azureSettings.ClientId == string.Empty)) ? "5af0d675-5736-4e38-bd94-493118e422cf" : azureSettings.ClientId;
-            _azureTenant = ((azureSettings.Tenant == null) || (azureSettings.Tenant == string.Empty)) ? "invisiblefence.com": azureSettings.Tenant;
-            _azureADInstance = ((azureSettings.ADInstance == null) || (azureSettings.ADInstance == string.Empty)) ? "https://login.microsoft.com/{0}" : azureSettings.ADInstance;
-            _logoutRedirectUri = ((azureSettings.LogoutRedirectUri == null) || (azureSettings.LogoutRedirectUri == string.Empty)) ? site.BaseUrl : azureSettings.LogoutRedirectUri;
-            _azureAppName = ((azureSettings.AppName == null) || (azureSettings.AppName == string.Empty)) ? "AuthModuleDemo" : azureSettings.AppName;
+            _azureClientId = ((azureSettings.ClientId == null) || (azureSettings.ClientId == string.Empty)) ? 
+                "[example: 82692da5-a86f-44c9-9d53-2f88d52b478b]" : azureSettings.ClientId;
+
+            _azureTenant = ((azureSettings.Tenant == null) || (azureSettings.Tenant == string.Empty)) ? 
+                "faketenant.com" : azureSettings.Tenant;
+
+            _azureADInstance = ((azureSettings.ADInstance == null) || (azureSettings.ADInstance == string.Empty)) ? 
+                "https://login.microsoft.com/{0}" : azureSettings.ADInstance;
+
+            _logoutRedirectUri = ((azureSettings.LogoutRedirectUri == null) || (azureSettings.LogoutRedirectUri == string.Empty)) ? 
+                site.BaseUrl : azureSettings.LogoutRedirectUri;
+
+            _azureAppName = ((azureSettings.AppName == null) || (azureSettings.AppName == string.Empty)) ? 
+                "[example: MyAppName]" : azureSettings.AppName;
+
             _sslEnabled = azureSettings.SSLEnabled;
+
             _azureWebSiteProtectionEnabled = azureSettings.AzureWebSiteProtectionEnabled;
         }
 
