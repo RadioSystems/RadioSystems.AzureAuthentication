@@ -8,26 +8,40 @@ using Microsoft.Owin.Security.ActiveDirectory;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.DataProtection;
 using Microsoft.Owin.Security.OpenIdConnect;
+using Orchard.ContentManagement;
 using Orchard.Logging;
 using Orchard.Owin;
+using Orchard.Settings;
 using Owin;
 using RadioSystems.AzureAuthentication.Constants;
+using RadioSystems.AzureAuthentication.Models;
 using RadioSystems.AzureAuthentication.Security;
 
 namespace RadioSystems.AzureAuthentication {
     public class OwinMiddlewares : IOwinMiddlewareProvider {
         public ILogger Logger { get; set; }
+       
+        private readonly string _azureClientId;
+        private readonly string _azureTenant;
+        private readonly string _azureADInstance;
+        private readonly string _logoutRedirectUri;
+        private readonly string _azureAppName;
+        private readonly bool _sslEnabled;
+        private readonly bool _azureWebSiteProtectionEnabled;
 
-        private readonly string _azureClientId = DefaultAzureSettings.ClientId;
-        private readonly string _azureTenant = DefaultAzureSettings.Tenant;
-        private readonly string _azureADInstance = DefaultAzureSettings.ADInstance;
-        private readonly string _logoutRedirectUri = DefaultAzureSettings.LogoutRedirectUri;
-        private readonly string _azureAppName = DefaultAzureSettings.AppName;
-        private readonly bool _sslEnabled = DefaultAzureSettings.SSLEnabled;
-        private readonly bool _azureWebSiteProtectionEnabled = DefaultAzureSettings.AzureWebSiteProtectionEnabled;
-
-        public OwinMiddlewares() {
+        public OwinMiddlewares(ISiteService siteService) {
             Logger = NullLogger.Instance;
+
+            var site = siteService.GetSiteSettings();
+            var azureSettings = site.As<AzureSettingsPart>();
+
+            _azureClientId = azureSettings.ClientId ?? "5af0d675-5736-4e38-bd94-493118e422cf";
+            _azureTenant = azureSettings.Tenant ?? "invisiblefence.com";
+            _azureADInstance = "https://login.microsoft.com/{0}";
+            _logoutRedirectUri = site.BaseUrl;
+            _azureAppName = azureSettings.AppName ?? "AuthModuleDemo";
+            _sslEnabled = azureSettings.SSLEnabled;
+            _azureWebSiteProtectionEnabled = azureSettings.AzureWebSiteProtectionEnabled;
         }
 
         public IEnumerable<OwinMiddlewareRegistration> GetOwinMiddlewares() {
